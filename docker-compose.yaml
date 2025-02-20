@@ -83,3 +83,17 @@ services:
       - KAFKA_CLUSTERS_0_NAME=kafka1
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper1:2181
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  grafana_data:
