@@ -1,6 +1,6 @@
 FROM quay.io/jupyter/datascience-notebook
 USER root
-
+COPY .env /home/jovyan/.env
 ARG openjdk_version="17"
 RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
