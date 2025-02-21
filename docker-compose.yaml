@@ -73,6 +73,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       ALLOW_PLAINTEXT_LISTENER: "yes"
       KAFKA_NUM_PARTITIONS: ${NUM_PARTITIONS:-2}
+      KAFKA_LOG_CLEANUP_POLICY: compact
   kafka-ui:
     image: provectuslabs/kafka-ui
     container_name: kafka-ui
@@ -83,6 +84,7 @@ services:
       - KAFKA_CLUSTERS_0_NAME=kafka1
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper1:2181
+    
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -93,7 +95,22 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - grafana_data:/var/lib/grafana
+      - grafana_data:/var/lib/grafana 
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  
+  pushgateway:
+    image: prom/pushgateway:latest
+    container_name: pushgateway
+    ports:
+      - "9091:9091"
+  
 
 volumes:
   grafana_data:
